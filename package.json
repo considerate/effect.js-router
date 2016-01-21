@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/considerate/effect.js-http#readme",
   "dependencies": {
-    "effectjs": "0.0.1"
+    "effectjs": "0.0.1",
+    "zen-observable": "^0.1.9"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.3.13"
