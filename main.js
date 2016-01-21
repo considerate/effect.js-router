@@ -19,6 +19,13 @@ const init = (router) => (startpage, ...args) => {
     });
 };
 
+const updateHash = (hash) => {
+    return Effect.call((hash) => {
+        history.pushState(null,null,'#'+hash);
+        return []; //No actions created
+    }, hash);
+};
+
 const update = (router) => (state, action) => {
     const {type, data} = action;
     if(type === Actions.gotoPage) {
@@ -33,7 +40,10 @@ const update = (router) => (state, action) => {
                     pageState: pageState,
                     pages,
                 },
-                pageEffect.map(Action.wrap(Actions.pageAction, {page: page}))
+                Effect.all([
+                    pageEffect.map(Action.wrap(Actions.pageAction, {page: page})),
+                    updateHash(pagename)
+                ])
             );
         });
     } else if(type === Actions.urlChanged) {

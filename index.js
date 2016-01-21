@@ -39,6 +39,13 @@ var init = function init(router) {
     };
 };
 
+var updateHash = function updateHash(hash) {
+    return Effect.call(function (hash) {
+        history.pushState(null, null, '#' + hash);
+        return []; //No actions created
+    }, hash);
+};
+
 var update = function update(router) {
     return function (state, action) {
         var type = action.type;
@@ -58,7 +65,7 @@ var update = function update(router) {
                             page: page,
                             pageState: pageState,
                             pages: pages
-                        }, pageEffect.map(_effectjs.Action.wrap(Actions.pageAction, { page: page })));
+                        }, Effect.all([pageEffect.map(_effectjs.Action.wrap(Actions.pageAction, { page: page })), updateHash(pagename)]));
                     })
                 };
             })();
