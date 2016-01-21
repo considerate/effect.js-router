@@ -5,7 +5,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.inputs = exports.Actions = undefined;
 
+var _zenObserverable = require('zen-observerable');
+
+var _zenObserverable2 = _interopRequireDefault(_zenObserverable);
+
 var _effectjs = require('effectjs');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
@@ -129,7 +135,7 @@ exports.default = function () {
     return Router({}, undefined);
 };
 
-var inputs = exports.inputs = new Observable(function (observer) {
+var inputs = exports.inputs = new _zenObserverable2.default(function (observer) {
     if (window && 'onhashchange' in window) {
         winow.onhashchange = function () {
             observer.next((0, _effectjs.Action)(Actions.urlChanged, window.location.hash.substring(1)));
