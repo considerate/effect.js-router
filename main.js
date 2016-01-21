@@ -55,6 +55,7 @@ const update = (router) => (state, action) => {
             return Result(state);
         }
         const page = pages[newHash].component;
+        const args = [];
         return page.init(...args)
         .then((pageState, pageEffect) => {
             return Result(

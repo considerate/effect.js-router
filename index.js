@@ -85,8 +85,9 @@ var update = function update(router) {
                     };
                 }
                 var page = pages[newHash].component;
+                var args = [];
                 return {
-                    v: page.init.apply(page, _toConsumableArray(args)).then(function (pageState, pageEffect) {
+                    v: page.init.apply(page, args).then(function (pageState, pageEffect) {
                         return (0, _effectjs.Result)({
                             page: page,
                             pageState: pageState,
