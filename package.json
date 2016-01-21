@@ -1,0 +1,26 @@
+{
+  "name": "effectjs-router",
+  "version": "0.0.1",
+  "description": "Simple router for effect.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "babel main.js --out-file index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/considerate/effect.js-http.git"
+  },
+  "author": "Viktor Kronvall, Christopher Lillthors",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/considerate/effect.js-http/issues"
+  },
+  "homepage": "https://github.com/considerate/effect.js-http#readme",
+  "dependencies": {
+    "effectjs": "0.0.1"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13"
+  }
+}
