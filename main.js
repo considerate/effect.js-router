@@ -3,7 +3,7 @@ import {Action,Result,Types,Effect} from 'effectjs';
 
 export const Actions = Types('gotoPage', 'urlChanged', 'pageAction', 'hashUpdated');
 
-const init = (router) => (startpage, ...args) => {
+const init = (router) => (path, ...args) => {
     const {pages} = router;
     const page = pages[startpage].component;
     const result = page.init(...args);
@@ -13,6 +13,7 @@ const init = (router) => (startpage, ...args) => {
                 page: page,
                 pageState: pageState,
                 pages: pages,
+                path: path,
             },
             pageEffect.map(Action.wrap(Actions.pageAction, {page: page}))
         );
@@ -39,6 +40,7 @@ const update = (router) => (state, action) => {
                     page: page,
                     pageState: pageState,
                     pages,
+                    path: pagename,
                 },
                 Effect.all([
                     pageEffect.map(Action.wrap(Actions.pageAction, {page: page})),
@@ -47,9 +49,26 @@ const update = (router) => (state, action) => {
             );
         });
     } else if(type === Actions.urlChanged) {
-
+        const {pages,path} = state;
+        const newHash = data;
+        if(page === newHash) {
+            return Result(state);
+        }
+        const page = pages[newHash].component;
+        return page.init(...args)
+        .then((pageState, pageEffect) => {
+            return Result(
+                {
+                    page: page,
+                    pageState: pageState,
+                    pages,
+                    path: newHash,
+                },
+                pageEffect.map(Action.wrap(Actions.pageAction, {page: page}))
+            );
+        });
     } else if(type === Actions.pageAction) {
-        const {pageState, page, pages} = state;
+        const {pageState, page, pages, path} = state;
         const {page: actionPage} = data;
         if(page !== actionPage) {
             return Result(state); //Do not handle actions for pages not shown
@@ -62,6 +81,7 @@ const update = (router) => (state, action) => {
                     page: page,
                     pageState: nextPageState,
                     pages,
+                    path,
                 },
                 nextPageEffect.map(Action.wrap(Actions.pageAction, {page: page}))
             );
@@ -114,7 +134,7 @@ export default () => {
 
 export const inputs = new Observable(observer => {
     if(window && 'onhashchange' in window) {
-        winow.onhashchange = () => {
+        window.onhashchange = () => {
             observer.next(Action(Actions.urlChanged, window.location.hash.substring(1)));
         };
     };

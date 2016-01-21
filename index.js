@@ -20,7 +20,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var Actions = exports.Actions = (0, _effectjs.Types)('gotoPage', 'urlChanged', 'pageAction', 'hashUpdated');
 
 var init = function init(router) {
-    return function (startpage) {
+    return function (path) {
         for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
             args[_key - 1] = arguments[_key];
         }
@@ -33,7 +33,8 @@ var init = function init(router) {
             return (0, _effectjs.Result)({
                 page: page,
                 pageState: pageState,
-                pages: pages
+                pages: pages,
+                path: path
             }, pageEffect.map(_effectjs.Action.wrap(Actions.pageAction, { page: page })));
         });
     };
@@ -64,18 +65,45 @@ var update = function update(router) {
                         return (0, _effectjs.Result)({
                             page: page,
                             pageState: pageState,
-                            pages: pages
+                            pages: pages,
+                            path: pagename
                         }, _effectjs.Effect.all([pageEffect.map(_effectjs.Action.wrap(Actions.pageAction, { page: page })), updateHash(pagename)]));
                     })
                 };
             })();
 
             if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-        } else if (type === Actions.urlChanged) {} else if (type === Actions.pageAction) {
+        } else if (type === Actions.urlChanged) {
             var _ret2 = (function () {
+                var pages = state.pages;
+                var path = state.path;
+
+                var newHash = data;
+                if (page === newHash) {
+                    return {
+                        v: (0, _effectjs.Result)(state)
+                    };
+                }
+                var page = pages[newHash].component;
+                return {
+                    v: page.init.apply(page, _toConsumableArray(args)).then(function (pageState, pageEffect) {
+                        return (0, _effectjs.Result)({
+                            page: page,
+                            pageState: pageState,
+                            pages: pages,
+                            path: newHash
+                        }, pageEffect.map(_effectjs.Action.wrap(Actions.pageAction, { page: page })));
+                    })
+                };
+            })();
+
+            if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+        } else if (type === Actions.pageAction) {
+            var _ret3 = (function () {
                 var pageState = state.pageState;
                 var page = state.page;
                 var pages = state.pages;
+                var path = state.path;
                 var actionPage = data.page;
 
                 if (page !== actionPage) {
@@ -89,13 +117,14 @@ var update = function update(router) {
                         return (0, _effectjs.Result)({
                             page: page,
                             pageState: nextPageState,
-                            pages: pages
+                            pages: pages,
+                            path: path
                         }, nextPageEffect.map(_effectjs.Action.wrap(Actions.pageAction, { page: page })));
                     })
                 };
             })();
 
-            if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+            if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
         } else if (type === Actions.hashUpdated) {
             return (0, _effectjs.Result)(state);
         }
@@ -146,7 +175,7 @@ exports.default = function () {
 
 var inputs = exports.inputs = new _zenObservable2.default(function (observer) {
     if (window && 'onhashchange' in window) {
-        winow.onhashchange = function () {
+        window.onhashchange = function () {
             observer.next((0, _effectjs.Action)(Actions.urlChanged, window.location.hash.substring(1)));
         };
     };
