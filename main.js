@@ -1,7 +1,7 @@
 import Observable from 'zen-observable';
 import {Action,Result,Types,Effect} from 'effectjs';
 
-export const Actions = Types('gotoPage', 'urlChanged', 'pageAction');
+export const Actions = Types('gotoPage', 'urlChanged', 'pageAction', 'hashUpdated');
 
 const init = (router) => (startpage, ...args) => {
     const {pages} = router;
@@ -22,7 +22,7 @@ const init = (router) => (startpage, ...args) => {
 const updateHash = (hash) => {
     return Effect.call((hash) => {
         history.pushState(null,null,'#'+hash);
-        return []; //No actions created
+        return Action(Actions.hashUpdated);
     }, hash);
 };
 
@@ -66,6 +66,8 @@ const update = (router) => (state, action) => {
                 nextPageEffect.map(Action.wrap(Actions.pageAction, {page: page}))
             );
         });
+    } else if(type === Actions.hashUpdated) {
+        return Result(state);
     }
 };
 

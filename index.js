@@ -17,7 +17,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var Actions = exports.Actions = (0, _effectjs.Types)('gotoPage', 'urlChanged', 'pageAction');
+var Actions = exports.Actions = (0, _effectjs.Types)('gotoPage', 'urlChanged', 'pageAction', 'hashUpdated');
 
 var init = function init(router) {
     return function (startpage) {
@@ -42,7 +42,7 @@ var init = function init(router) {
 var updateHash = function updateHash(hash) {
     return _effectjs.Effect.call(function (hash) {
         history.pushState(null, null, '#' + hash);
-        return []; //No actions created
+        return (0, _effectjs.Action)(Actions.hashUpdated);
     }, hash);
 };
 
@@ -96,6 +96,8 @@ var update = function update(router) {
             })();
 
             if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+        } else if (type === Actions.hashUpdated) {
+            return (0, _effectjs.Result)(state);
         }
     };
 };
