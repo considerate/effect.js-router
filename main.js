@@ -5,7 +5,7 @@ export const Actions = Types('gotoPage', 'urlChanged', 'pageAction', 'hashUpdate
 
 const init = (router) => (path, ...args) => {
     const {pages} = router;
-    const page = pages[startpage].component;
+    const page = pages[path].component;
     const result = page.init(...args);
     return result.then((pageState, pageEffect) => {
         return Result(
@@ -30,9 +30,9 @@ const updateHash = (hash) => {
 const update = (router) => (state, action) => {
     const {type, data} = action;
     if(type === Actions.gotoPage) {
-        const {page: pagename, args: args = []} = data;
+        const {page: path, args: args = []} = data;
         const {pages} = state;
-        const page = pages[pagename].component;
+        const page = pages[path].component;
         return page.init(...args)
         .then((pageState, pageEffect) => {
             return Result(
@@ -40,11 +40,11 @@ const update = (router) => (state, action) => {
                     page: page,
                     pageState: pageState,
                     pages,
-                    path: pagename,
+                    path,
                 },
                 Effect.all([
                     pageEffect.map(Action.wrap(Actions.pageAction, {page: page})),
-                    updateHash(pagename)
+                    updateHash(path)
                 ])
             );
         });

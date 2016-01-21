@@ -27,7 +27,7 @@ var init = function init(router) {
 
         var pages = router.pages;
 
-        var page = pages[startpage].component;
+        var page = pages[path].component;
         var result = page.init.apply(page, args);
         return result.then(function (pageState, pageEffect) {
             return (0, _effectjs.Result)({
@@ -54,20 +54,20 @@ var update = function update(router) {
 
         if (type === Actions.gotoPage) {
             var _ret = (function () {
-                var pagename = data.page;
+                var path = data.page;
                 var _data$args = data.args;
                 var args = _data$args === undefined ? [] : _data$args;
                 var pages = state.pages;
 
-                var page = pages[pagename].component;
+                var page = pages[path].component;
                 return {
                     v: page.init.apply(page, _toConsumableArray(args)).then(function (pageState, pageEffect) {
                         return (0, _effectjs.Result)({
                             page: page,
                             pageState: pageState,
                             pages: pages,
-                            path: pagename
-                        }, _effectjs.Effect.all([pageEffect.map(_effectjs.Action.wrap(Actions.pageAction, { page: page })), updateHash(pagename)]));
+                            path: path
+                        }, _effectjs.Effect.all([pageEffect.map(_effectjs.Action.wrap(Actions.pageAction, { page: page })), updateHash(path)]));
                     })
                 };
             })();
