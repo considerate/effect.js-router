@@ -1,5 +1,5 @@
 import Observable from 'zen-observable';
-import {Action,Result,Types} from 'effectjs';
+import {Action,Result,Types,Effect} from 'effectjs';
 
 export const Actions = Types('gotoPage', 'urlChanged', 'pageAction');
 
