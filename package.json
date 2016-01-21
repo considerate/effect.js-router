@@ -23,5 +23,11 @@
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.3.13"
+  },
+  "jspm": {
+    "dependencies": {
+      "effectjs": "0.0.1",
+      "zen-observable": "^0.1.9"
+    }
   }
 }
