@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/considerate/effect.js-http.git"
+    "url": "git+https://github.com/considerate/effect.js-router.git"
   },
   "author": "Viktor Kronvall, Christopher Lillthors",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/considerate/effect.js-http/issues"
+    "url": "https://github.com/considerate/effect.js-router/issues"
   },
-  "homepage": "https://github.com/considerate/effect.js-http#readme",
+  "homepage": "https://github.com/considerate/effect.js-router#readme",
   "dependencies": {
     "effectjs": "0.0.1",
     "zen-observable": "^0.1.9"
